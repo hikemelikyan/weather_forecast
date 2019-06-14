@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/id_once_a_day"
+        android:title="Once a day" />
+    <item
+        android:id="@+id/id_twice_a_day"
+        android:title="Twice a day" />
+    <item
+        android:id="@+id/id_trice_a_day"
+        android:title="Trice a day" />
+</menu>

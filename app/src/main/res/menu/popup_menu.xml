@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/id_popup_celsius"
+        android:title="°C" />
+    <item
+        android:id="@+id/id_popup_kelvin"
+        android:title="K" />
+    <item
+        android:id="@+id/id_popup_fahrenheit"
+        android:title="°F" />
+</menu>
