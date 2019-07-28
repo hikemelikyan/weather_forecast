@@ -8,4 +8,9 @@
     <string name="location">Location</string>
     <string name="notifications">Notifications</string>
     <string name="turn_on_mobile_data_or_turn_wireless_network">Turn on mobile data or turn wireless network</string>
+    <string name="ok">OK</string>
+    <string name="access_token">pk.eyJ1IjoiaGlrZW1lbGlreWFuIiwiYSI6ImNqd2dpM2d1cjF0cHE0OG1nZ3VsamJ2OWUifQ.yb4fgjPI9EqC2Wsk1Yqedw</string>
+    <string name="api_key_map">AIzaSyBKWVirOUFqEMzdyHSH8pBZdBigu-M_s0s</string>
+    <string name="api_key_places">AIzaSyDJVotYDId53nZOY3R4tyvhsx_V7U305uA</string>
+
 </resources>

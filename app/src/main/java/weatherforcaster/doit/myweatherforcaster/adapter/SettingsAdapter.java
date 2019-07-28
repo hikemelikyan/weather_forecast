@@ -1,6 +1,7 @@
 package weatherforcaster.doit.myweatherforcaster.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import weatherforcaster.doit.myweatherforcaster.Common.Common;
 import weatherforcaster.doit.myweatherforcaster.R;
 import weatherforcaster.doit.myweatherforcaster.models.Settings;
 
@@ -25,7 +27,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
     private Context mContext;
     private List<Settings> mList;
     RecyclerClickListener mListener;
-
+    SharedPreferences mShared;
+    SharedPreferences.Editor editor;
 
     public interface RecyclerClickListener {
         void sendData(String click);
@@ -35,13 +38,16 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         this.mContext = mContext;
         this.mListener = mListener;
         mList = new ArrayList<>();
+        mShared = mContext.getSharedPreferences(Common.SHARED_PREFERANCE_NAME, Context.MODE_PRIVATE);
+        editor = mShared.edit();
     }
 
     @NonNull
     @Override
     public SettingsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        Settings settings = new Settings(mContext);
         return new SettingsViewHolder(LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.single_recycler_style, viewGroup, false));
+                .inflate(R.layout.single_recycler_style, viewGroup, false),settings);
     }
 
     public void setData(Settings data) {
@@ -50,17 +56,18 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         notifyDataSetChanged();
     }
 
-    Settings getData() {
+    public Settings getData() {
         return mList.get(0);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SettingsViewHolder settingsViewHolder, int i) {
+        editor.putBoolean("created", false);
         settingsViewHolder.mTextUnitCurrent.setText(getData().getUnitType());
-        settingsViewHolder.mFrequencyCurrent.setText(getData().getFrequency());
-        if(getData().getSwitchPosition()){
+        if (getData().getSwitchPosition()) {
             settingsViewHolder.mLayout.animate().alpha(1).setDuration(250);
-        }else{
+            settingsViewHolder.mFrequencyCurrent.setText(getData().getFrequency());
+        } else {
             settingsViewHolder.mLayout.animate().alpha(0).setDuration(250);
         }
     }
@@ -81,7 +88,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         private TextView mFrequencyCurrent;
         private boolean isChecked = true;
 
-        public SettingsViewHolder(@NonNull View itemView) {
+        public SettingsViewHolder(@NonNull View itemView,Settings settings) {
             super(itemView);
             mTextUnit = itemView.findViewById(R.id.id_text_unit);
             mTextUnitCurrent = itemView.findViewById(R.id.id_text_current_unit);
@@ -89,6 +96,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
             mFrequencyCurrent = itemView.findViewById(R.id.id_text_current_frequency);
             mLayout = itemView.findViewById(R.id.id_linear_visible_invisible);
             mSwitch = itemView.findViewById(R.id.id_switch);
+
+            mTextUnitCurrent.setText(settings.getUnitType());
+            mFrequencyCurrent.setText(settings.getFrequency());
+            mSwitch.setChecked(settings.getSwitchPosition());
 
             mFrequency.setOnClickListener(this);
             mFrequencyCurrent.setOnClickListener(this);
@@ -106,10 +117,9 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
                 mListener.sendData(CLICK_FOR_UNIT);
                 notifyDataSetChanged();
             } else if (v.getId() == R.id.id_switch) {
-                Settings settings = new Settings();
-                settings.setSwitchPosition(!isChecked);
+                getData().setSwitchPosition(!isChecked);
                 isChecked = !isChecked;
-                setData(settings);
+                setData(getData());
             }
         }
     }

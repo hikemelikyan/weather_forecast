@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#2B490F</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorButton">#5DAC56</color>
     <color name="colorGray">#888888</color>
     <color name="color_selected_tab">#B4FAB8</color>
     <color name="snackBar_pos">#3F773A</color>

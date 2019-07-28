@@ -3,9 +3,7 @@
     <item
         android:id="@+id/id_popup_celsius"
         android:title="°C" />
-    <item
-        android:id="@+id/id_popup_kelvin"
-        android:title="K" />
+
     <item
         android:id="@+id/id_popup_fahrenheit"
         android:title="°F" />

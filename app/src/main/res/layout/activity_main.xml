@@ -4,8 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/id_container"
     android:orientation="vertical"
     tools:context=".activity.MainActivity">
+
+
 
 
         <android.support.v7.widget.Toolbar
@@ -17,7 +20,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bee forecasted"
+                android:text="Bee forecast"
                 android:textAllCaps="true"
                 android:textSize="25sp"
                 android:textStyle="bold" />
