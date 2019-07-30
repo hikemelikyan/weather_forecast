@@ -14,8 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-import weatherforcaster.doit.myweatherforcaster.Common.Common;
+import weatherforcaster.doit.myweatherforcaster.common.Common;
 import weatherforcaster.doit.myweatherforcaster.R;
 import weatherforcaster.doit.myweatherforcaster.adapter.SettingsAdapter;
 import weatherforcaster.doit.myweatherforcaster.models.Settings;
@@ -26,9 +25,9 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
 
     private RecyclerView mRecyclerView;
     private SettingsAdapter mAdapter;
-    Settings settings;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    private Settings settings;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +53,8 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
         mRecyclerView = findViewById(R.id.id_single_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
-        sharedPreferences = getSharedPreferences(Common.SHARED_PREFERANCE_NAME,MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        mSharedPreferences = getSharedPreferences(Common.SHARED_PREFERANCE_NAME,MODE_PRIVATE);
+        editor = mSharedPreferences.edit();
 
         mAdapter = new SettingsAdapter(this, this);
         mAdapter.setData(new Settings(this));
@@ -73,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent();
-        String previous = sharedPreferences.getString("frequency","");
+        String previous = mSharedPreferences.getString("frequency","");
         if (item.getItemId() == R.id.id_ok) {
             if(mAdapter.getData().getUnitType().equals("°F")){
                 editor.putString("unit", "imperial");
@@ -83,7 +82,7 @@ public class SettingsActivity extends AppCompatActivity implements SettingsAdapt
             editor.putString("frequency", mAdapter.getData().getFrequency());
             editor.putBoolean("switch", mAdapter.getData().getSwitchPosition());
         }
-        if(sharedPreferences.getBoolean("switch",false)){
+        if(mSharedPreferences.getBoolean("switch",false)){
             if(!previous.equals(mAdapter.getData().getFrequency())){
                 Intent serviceIntent = new Intent(SettingsActivity.this,NotificationService.class);
                 serviceIntent.putExtra("frequency",mAdapter.getData().getFrequency());

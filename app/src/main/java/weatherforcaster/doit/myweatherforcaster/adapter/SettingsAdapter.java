@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import weatherforcaster.doit.myweatherforcaster.Common.Common;
+import weatherforcaster.doit.myweatherforcaster.common.Common;
 import weatherforcaster.doit.myweatherforcaster.R;
 import weatherforcaster.doit.myweatherforcaster.models.Settings;
 
@@ -47,7 +45,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
     public SettingsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         Settings settings = new Settings(mContext);
         return new SettingsViewHolder(LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.single_recycler_style, viewGroup, false),settings);
+                .inflate(R.layout.single_recycler_style, viewGroup, false), settings);
     }
 
     public void setData(Settings data) {
@@ -88,7 +86,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         private TextView mFrequencyCurrent;
         private boolean isChecked = true;
 
-        public SettingsViewHolder(@NonNull View itemView,Settings settings) {
+        public SettingsViewHolder(@NonNull View itemView, Settings settings) {
             super(itemView);
             mTextUnit = itemView.findViewById(R.id.id_text_unit);
             mTextUnitCurrent = itemView.findViewById(R.id.id_text_current_unit);

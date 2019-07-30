@@ -28,7 +28,7 @@ import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import weatherforcaster.doit.myweatherforcaster.Common.Common;
+import weatherforcaster.doit.myweatherforcaster.common.Common;
 import weatherforcaster.doit.myweatherforcaster.R;
 import weatherforcaster.doit.myweatherforcaster.database.SevedInformation;
 import weatherforcaster.doit.myweatherforcaster.models.TodayModel.All;
@@ -36,16 +36,18 @@ import weatherforcaster.doit.myweatherforcaster.network.GetConnect;
 import weatherforcaster.doit.myweatherforcaster.network.WeatherAPI;
 
 
-public class FirstFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class CurrentWeatherFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private double mLat;
+    private double mLon;
+    private boolean currentConnection = true;
+    private String mUnits;
+    final String APP_ID = "ead6c284b33ca76b77085fb56365f06d";
+    public static final int REQUEST_FOR_ADDING_PLACE = 74;
     private static final String ARG_PAGE_NUMBER = "number";
     private static final String LAT = "lat";
     private static final String LON = "long";
     private static final String UNIT = "unit";
-    private double mLat;
-    private double mLon;
-    private boolean currentConnection = true;
-    final String APP_ID = "ead6c284b33ca76b77085fb56365f06d";
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mTextWind;
     private TextView mTextHumidity;
@@ -57,21 +59,19 @@ public class FirstFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private CardView mCardView;
     private TextView mTime;
     private All data;
-    private String mUnits;
     private Realm mRealm;
     private SharedPreferences mShared;
     private SharedPreferences.Editor editor;
     private Button mBtnAddPlace;
-    public static final int REQUEST_FOR_ADDING_PLACE = 74;
     private FromFirstListener listener;
 
     public interface FromFirstListener {
         void Clicked(int requestCode);
     }
 
-    public static FirstFragment newInstance(int page, double latitude, double longitude) {
-        Log.d("TESTING", "newInstance FirstFragment");
-        FirstFragment fragment = new FirstFragment();
+    public static CurrentWeatherFragment newInstance(int page, double latitude, double longitude) {
+        Log.d("TESTING", "newInstance CurrentWeatherFragment");
+        CurrentWeatherFragment fragment = new CurrentWeatherFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE_NUMBER, page);
         args.putDouble(LAT, latitude);
@@ -83,19 +83,19 @@ public class FirstFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TESTING", "onCreate FirstFragment");
+        Log.d("TESTING", "onCreate CurrentWeatherFragment");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("TESTING", "onActivityCreated FirstFragment");
+        Log.d("TESTING", "onActivityCreated CurrentWeatherFragment");
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("TESTING", "onCreateView FirstFragment");
+        Log.d("TESTING", "onCreateView CurrentWeatherFragment");
         View mView = inflater.inflate(R.layout.fragment_first, container, false);
         InitView(mView);
         return mView;
@@ -105,13 +105,13 @@ public class FirstFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("TESTING", "onDestroyView FirstFragment");
+        Log.d("TESTING", "onDestroyView CurrentWeatherFragment");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("TESTING", "onStart FirstFragment");
+        Log.d("TESTING", "onStart CurrentWeatherFragment");
         if (getArguments() != null) {
             mLat = getArguments().getDouble(LAT);
             mLon = getArguments().getDouble(LON);
@@ -124,31 +124,30 @@ public class FirstFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("TESTING", "onResume FirstFragment");
+        Log.d("TESTING", "onResume CurrentWeatherFragment");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("TESTING", "onPause FirstFragment");
+        Log.d("TESTING", "onPause CurrentWeatherFragment");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("TESTING", "onStop FirstFragment");
+        Log.d("TESTING", "onStop CurrentWeatherFragment");
     }
 
 
     private void InitView(View mView) {
-        Log.d("TESTING", "IniView FirstFragment");
+        Log.d("TESTING", "IniView CurrentWeatherFragment");
         data = null;
         mBtnAddPlace = mView.findViewById(R.id.id_btn_new_location);
         mBtnAddPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.Clicked(REQUEST_FOR_ADDING_PLACE);
-
             }
         });
         mCardView = mView.findViewById(R.id.id_card_view);
@@ -163,16 +162,14 @@ public class FirstFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         mTemperature = mView.findViewById(R.id.id_day_temperature_today);
         mTime = mView.findViewById(R.id.id_field_time_today);
         mRealm = Realm.getDefaultInstance();
-
         mRealm.beginTransaction();
         mRealm.commitTransaction();
-
         LoadLast(mRealm);
     }
 
 
     private void LoadLast(Realm mRealm) {
-        Log.d("TESTING", "LoadLast FirstFragment");
+        Log.d("TESTING", "LoadLast CurrentWeatherFragment");
         RealmResults<SevedInformation> results = mRealm.where(SevedInformation.class).findAll();
         if (results.size() > 0) {
             mTemperature.setText(results.last().getTemperature());
@@ -187,7 +184,7 @@ public class FirstFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     public void  OnCallRequest(String mLat, String mLon, String mUnits) {
-        Log.d("TESTING", "OnCallRequest FirstFragment");
+        Log.d("TESTING", "OnCallRequest CurrentWeatherFragment");
         WeatherAPI api = GetConnect.getInstance().create(WeatherAPI.class);
         Call<All> call = api
                 .getWeatherForNow(String.valueOf(mLat), String.valueOf(mLon), APP_ID, mUnits);
@@ -235,7 +232,7 @@ public class FirstFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void SaveData(final String time) {
-        Log.d("TESTING", "SaveData FirstFragment");
+        Log.d("TESTING", "SaveData CurrentWeatherFragment");
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -254,7 +251,7 @@ public class FirstFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onRefresh() {
-        Log.d("TESTING", "OnRefresh FirstFragment");
+        Log.d("TESTING", "OnRefresh CurrentWeatherFragment");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -289,7 +286,7 @@ public class FirstFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d("TESTING", "onAttach FirstFragment");
+        Log.d("TESTING", "onAttach CurrentWeatherFragment");
         try {
             listener = (FromFirstListener) context;
         } catch (ClassCastException e) {

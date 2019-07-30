@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import weatherforcaster.doit.myweatherforcaster.fragment.FirstFragment;
-import weatherforcaster.doit.myweatherforcaster.fragment.SecondFragment;
+import weatherforcaster.doit.myweatherforcaster.fragment.CurrentWeatherFragment;
+import weatherforcaster.doit.myweatherforcaster.fragment.FiveDayWeatherFragment;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -28,9 +28,9 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int i) {
             switch (i) {
                 case 0:
-                    return FirstFragment.newInstance(0,mLat,mLon);
+                    return CurrentWeatherFragment.newInstance(0,mLat,mLon);
                 case 1:
-                    return SecondFragment.newInstance(1,mLat,mLon);
+                    return FiveDayWeatherFragment.newInstance(1,mLat,mLon);
             }
             return null;
     }

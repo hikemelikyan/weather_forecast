@@ -1,11 +1,8 @@
 package weatherforcaster.doit.myweatherforcaster.fragment;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -18,41 +15,36 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.Objects;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import weatherforcaster.doit.myweatherforcaster.Common.Common;
+import weatherforcaster.doit.myweatherforcaster.common.Common;
 import weatherforcaster.doit.myweatherforcaster.R;
 import weatherforcaster.doit.myweatherforcaster.adapter.FiveDayAdapter;
 import weatherforcaster.doit.myweatherforcaster.models.FiveDayThreeHourModel.Forecasted;
 import weatherforcaster.doit.myweatherforcaster.network.GetConnect;
 import weatherforcaster.doit.myweatherforcaster.network.WeatherAPI;
 
+public class FiveDayWeatherFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-public class SecondFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-
+    private double mLat;
+    private double mLon;
+    private boolean currentConnection = true;
+    private String mUnits;
+    final String APP_ID = "ead6c284b33ca76b77085fb56365f06d";
     private static final String ARG_PAGE_NUMBER = "number";
     private static final String LAT = "lat";
     private static final String LON = "long";
     private static final String UNIT = "unit";
-    final String APP_ID = "ead6c284b33ca76b77085fb56365f06d";
-    private boolean currentConnection = true;
-    private double mLat;
-    private double mLon;
-    private String mUnits;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SharedPreferences mShared;
     private FiveDayAdapter mAdapter;
-
     private RecyclerView mRecycler;
 
-
-    public static SecondFragment newInstance(int page, double latitude, double longitude) {
-        SecondFragment fragment = new SecondFragment();
-        Log.d("TESTING","newInstance SecondFragment");
+    public static FiveDayWeatherFragment newInstance(int page, double latitude, double longitude) {
+        FiveDayWeatherFragment fragment = new FiveDayWeatherFragment();
+        Log.d("TESTING","newInstance FiveDayWeatherFragment");
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE_NUMBER, page);
         args.putDouble(LAT, latitude);
@@ -64,13 +56,13 @@ public class SecondFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TESTING","onCreate SecondFragment");
+        Log.d("TESTING","onCreate FiveDayWeatherFragment");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("TESTING","onStart SecondFragment");
+        Log.d("TESTING","onStart FiveDayWeatherFragment");
         if (getArguments() != null) {
             mLat = getArguments().getDouble(LAT);
             mLon = getArguments().getDouble(LON);
@@ -81,20 +73,16 @@ public class SecondFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log.d("TESTING","onCreateView SecondFragment");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("TESTING","onCreateView FiveDayWeatherFragment");
         View mView = inflater.inflate(R.layout.fragment_second, container, false);
-
         InitView(mView);
-
-
         mRecycler.setAdapter(mAdapter);
         return mView;
     }
 
     private void InitView(View mView){
-        Log.d("TESTING","InitView SecondFragment");
+        Log.d("TESTING","InitView FiveDayWeatherFragment");
         mRecycler = mView.findViewById(R.id.id_recycler);
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecycler.setHasFixedSize(true);
@@ -104,18 +92,13 @@ public class SecondFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 getResources().getColor(android.R.color.holo_orange_light),
                 getResources().getColor(android.R.color.holo_red_light));
         mSwipeRefreshLayout.setOnRefreshListener(this);
-
-
         mAdapter = new FiveDayAdapter(getActivity());
     }
 
     private void OnRequest(String mLat, String mLon, String mUnits) {
-        Log.d("TESTING","OnRequest SecondFragment");
+        Log.d("TESTING","OnRequest FiveDayWeatherFragment");
         WeatherAPI api = GetConnect.getInstance().create(WeatherAPI.class);
-        Call<Forecasted> call = api
-                .getWeatherForFiveDays(mLat, mLon, APP_ID, mUnits);
-
-
+        Call<Forecasted> call = api.getWeatherForFiveDays(mLat, mLon, APP_ID, mUnits);
         call.enqueue(new Callback<Forecasted>() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -144,13 +127,12 @@ public class SecondFragment extends Fragment implements SwipeRefreshLayout.OnRef
         });
     }
 
-
     @Override
     public void onRefresh() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.d("TESTING","OnRefresh SecondFragment");
+                Log.d("TESTING","OnRefresh FiveDayWeatherFragment");
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (Common.checkNetworkConnectionStatus(Objects.requireNonNull(getContext()))) {
                     OnRequest(String.valueOf(mLat),String.valueOf(mLon),mUnits);

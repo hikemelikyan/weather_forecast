@@ -8,12 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import weatherforcaster.doit.myweatherforcaster.R;
 import weatherforcaster.doit.myweatherforcaster.models.FiveDayThreeHourModel.AllList;
 
@@ -54,8 +51,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.ViewHolder> 
         viewHolder.mHumidity.setText(String.valueOf(getItem(i).getMain().getHumidity()));
         viewHolder.mPressure.setText(String.valueOf(getItem(i).getMain().getPressure()));
         viewHolder.mTime.setText(getItem(i).getDtTxt().substring
-                (getItem(i).getDtTxt().length()-8,getItem(i).getDtTxt().length()-3));
-
+                (getItem(i).getDtTxt().length() - 8, getItem(i).getDtTxt().length() - 3));
 
 
         switch (getItem(i).getWeather().get(0).getIcon()) {

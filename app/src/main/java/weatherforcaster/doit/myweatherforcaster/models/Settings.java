@@ -3,7 +3,7 @@ package weatherforcaster.doit.myweatherforcaster.models;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import weatherforcaster.doit.myweatherforcaster.Common.Common;
+import weatherforcaster.doit.myweatherforcaster.common.Common;
 
 public class Settings {
     private Context mContext;

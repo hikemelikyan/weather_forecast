@@ -6,16 +6,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class GetConnect {
 
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
-    private static Retrofit retrofit;
+    private static Retrofit mRetrofit;
 
     public static Retrofit getInstance() {
-        if (retrofit == null) {
-            return retrofit = new Retrofit.Builder()
+        if (mRetrofit == null) {
+            return mRetrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         } else {
-            return retrofit;
+            return mRetrofit;
         }
     }
 }

@@ -21,7 +21,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -31,38 +30,36 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker.IntentBuilder;
-
 import java.util.ArrayList;
-
-import weatherforcaster.doit.myweatherforcaster.Common.Common;
+import weatherforcaster.doit.myweatherforcaster.common.Common;
 import weatherforcaster.doit.myweatherforcaster.R;
 import weatherforcaster.doit.myweatherforcaster.adapter.MyFragmentPagerAdapter;
-import weatherforcaster.doit.myweatherforcaster.fragment.FirstFragment;
+import weatherforcaster.doit.myweatherforcaster.fragment.CurrentWeatherFragment;
 import weatherforcaster.doit.myweatherforcaster.service.NotificationService;
 
 import static com.google.android.gms.location.places.ui.PlacePicker.getPlace;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks, LocationListener, FirstFragment.FromFirstListener {
+        GoogleApiClient.ConnectionCallbacks, LocationListener, CurrentWeatherFragment.FromFirstListener {
 
-    private ViewPager mPager;
-    private PagerAdapter mAdapter;
     private int SETTINGS_ACTIVITY_REQUEST = 1;
-    private Location mLocation;
-    public GoogleApiClient mApiClient;
-    private LocationRequest mLocationRequest;
-    private static final long UPDATE_INTERVAL = 2500000;
-    private static final long FASTEST_INTERVAL = 2500000;
     private double mLon;
     private double mLat;
+    private static final int ALL_PERMISSIONS_RESULT = 7878;
+    private static final int PLACEPICKER_REQUEST = 148;
+    private static final long UPDATE_INTERVAL = 2500000;
+    private static final long FASTEST_INTERVAL = 2500000;
+    public GoogleApiClient mApiClient;
+    private ViewPager mPager;
+    private PagerAdapter mAdapter;
+    private Location mLocation;
+    private LocationRequest mLocationRequest;
     private ArrayList<String> mPermissionsToRequest;
     private ArrayList<String> mPermissionsRejected = new ArrayList<>();
     private ArrayList<String> mPermissions = new ArrayList<>();
-    private static final int ALL_PERMISSIONS_RESULT = 7878;
-    SharedPreferences mSPref;
-    SharedPreferences.Editor editor;
-    Intent intent;
-    private static final int PLACEPICKER_REQUEST = 148;
+    private SharedPreferences mSPref;
+    private SharedPreferences.Editor editor;
+    private Intent intent;
 
     //1.Create Init
     @Override
@@ -92,10 +89,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onStart() {
         super.onStart();
         Log.d("TESTING", "onStart Main");
-        if (mApiClient != null)
+        if (mApiClient != null) {
             if (!mApiClient.isConnected()) {
                 mApiClient.connect();
             }
+        }
     }
 
     //3.connected
@@ -137,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             mLat = mLocation.getLatitude();
             mLon = mLocation.getLongitude();
         }
-        if(location!=null){
+        if (location != null) {
 
         }
         Log.d("TESTING", "onLocationChanged");
@@ -273,13 +271,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 mLon = place.getLatLng().longitude;
                 mLat = place.getLatLng().latitude;
                 Toast.makeText(this, "" + place.getLatLng().latitude + place.getLatLng().longitude, Toast.LENGTH_SHORT).show();
-                Location location  = new Location("");
+                Location location = new Location("");
                 location.setLatitude(mLat);
                 location.setLongitude(mLon);
                 onLocationChanged(location);
 //                mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),this,mLat,mLon);
 //                mPager.setAdapter(mAdapter);
-//                FirstFragment.newInstance(0,mLat,mLon);
+//                CurrentWeatherFragment.newInstance(0,mLat,mLon);
             }
         }
     }
